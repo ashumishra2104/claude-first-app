@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useHabits } from './hooks/useHabits';
+import { unlockAudio } from './utils/sounds';
 import Dashboard from './components/Dashboard';
 import HabitList from './components/HabitList';
 import AddHabitModal from './components/AddHabitModal';
@@ -27,7 +28,7 @@ const AppBar = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  padding: max(12px, env(safe-area-inset-top)) 16px 12px;
   background: linear-gradient(135deg, #5B21B6, #6D28D9, #7C3AED, #5B21B6);
   background-size: 300% 300%;
   animation: ${gradientShift} 7s ease infinite;
@@ -93,6 +94,7 @@ export default function App() {
   const [henExcited, setHenExcited] = useState(false);
 
   const handleToggle = useCallback((id, date, { completing, x, y }) => {
+    unlockAudio(); // must be synchronous inside the tap gesture to unblock WebKit audio
     if (completing) {
       const unlocked = getNewAchievements(id, date);
       if (unlocked.length) {

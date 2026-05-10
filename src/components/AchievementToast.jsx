@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { playAchievementSound } from '../utils/sounds';
 
 const slideUp = keyframes`
   from { transform: translateY(120%); opacity: 0; }
@@ -71,6 +72,7 @@ export default function AchievementToast({ achievement, onDismiss }) {
 
   useEffect(() => {
     setLeaving(false);
+    playAchievementSound();
     const exitTimer = setTimeout(() => setLeaving(true), SHOW_MS);
     const doneTimer = setTimeout(onDismiss, SHOW_MS + EXIT_MS);
     return () => { clearTimeout(exitTimer); clearTimeout(doneTimer); };
